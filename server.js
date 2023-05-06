@@ -1,8 +1,9 @@
 const express = require('express')
 const mysql = require('mysql')
 const myconn = require('express-myconnection')
-
+const routes = require("./routes") 
 const app = express()
+
 app.set('port', process.env.PORT || 9000)
 const dbOptions = {
     host: 'mdb-test.c6vunyturrl6.us-west-1.rds.amazonaws.com',
@@ -17,21 +18,9 @@ app.use(myconn(mysql, dbOptions, 'single'))
 
 // routes
 app.get('/', (req, res) =>{
-    res.send('Welcome to my API')
+    res.send('Welcome to my Api Rest')
 });
-
-app.get('/flights', (req, res) => {
-    req.getConnection((err, conn) => {
-        if(err) return res.send(err)
-
-        conn.query('SELECT * FROM flight', (err, rows) => {
-            if(err) return res.send(err)
-
-            res.json(rows)
-        })
-    })
-})
-
+app.use("/flights", routes)
 
 // server running
 app.listen(app.get('port'), ()=> {
